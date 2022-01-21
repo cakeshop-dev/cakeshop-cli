@@ -1,0 +1,21 @@
+#!/bin/bash
+source .env
+ac_name=$(echo ${1} | rev | cut -d '=' -f 1 | rev)
+kv1=$(echo ${ac_name} | cut -c1-3) # | awk '{print tolower($0)')
+#echo $kv1
+if [ "$kv1" = "KV1" ] ; then
+	grep_container=$(echo ${ac_name} | cut -c1-3 | echo "kv1-komodo" | awk '{print tolower($0)}')
+	rpc_port=${KV1_SMARTCHAIN_NODE_RPC_PORT}
+else
+        grep_container=$(echo ${ac_name}-komodo | awk '{print tolower($0)}') 
+	rpc_port=${BATCH_SMARTCHAIN_NODE_RPC_PORT}
+fi
+#echo ${grep_container}
+instance=$(pwd | rev | cut -d '/' -f 1 |  cut -d '-' -f 1 | rev)
+deploytype=$(pwd | rev | cut -d '/' -f 1 |  cut -d '-' -f 2 | rev)
+container=$(docker ps -a | grep ${deploytype}-${instance} | grep ${grep_container} | rev | cut -d ' ' -f 1 | rev)
+echo ${ac_name} for instance $instance runs on ${container}
+command="/opt/komodo/komodo/src/komodo-cli -rpcuser=${BATCH_SMARTCHAIN_NODE_USERNAME} -rpcpassword=${BATCH_SMARTCHAIN_NODE_PASSWORD} -datadir=${DATA_PATH}${ac_name} -conffile=${DATA_PATH}${ac_name}/${ac_name}.conf -rpcport=$rpc_port $@"
+#echo $command
+#echo $ac_name | cut -c1-3
+docker exec -i -t ${container} ${command}
