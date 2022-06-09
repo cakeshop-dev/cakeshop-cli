@@ -1,13 +1,13 @@
 #!/bin/bash
 source .env
 ac_name=$(echo ${1} | rev | cut -d '=' -f 1 | rev)
-kv1=$(echo ${ac_name} | cut -c1-3) # | awk '{print tolower($0)')
-#echo $kv1
-if [ "$kv1" = "KV1" ] ; then
-	grep_container=$(echo ${ac_name} | cut -c1-3 | echo "kv1-komodo" | awk '{print tolower($0)}')
+data=$(echo ${ac_name} | rev | cut -c1-4 | rev) # | awk '{print tolower($0)')
+echo $data
+if [ "$data" = "DATA" ] ; then
+	grep_container=$(echo ${ac_name} | cut -c1-6 | echo "dir-komodo" | awk '{print tolower($0)}')
 	rpc_port=${KV1_SMARTCHAIN_NODE_RPC_PORT}
 else
-        grep_container=$(echo ${ac_name}-komodo | awk '{print tolower($0)}') 
+        grep_container=$(echo ${ac_name}batch-komodo | awk '{print tolower($0)}') 
 	rpc_port=${BATCH_SMARTCHAIN_NODE_RPC_PORT}
 fi
 #echo ${grep_container}
