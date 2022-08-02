@@ -5,10 +5,10 @@ data=$(echo ${ac_name} | rev | cut -c1-4 | rev) # | awk '{print tolower($0)')
 prefix=$(pwd | rev | cut -d '/' -f 1 | rev | cut -d '-' -f 1)
 #echo $data
 if [ "$data" = "DATA" ] ; then
-	grep_container=$(echo ${ac_name} | cut -c1-6 | echo "dir-komodo" | awk '{print tolower($0)}')
+	grep_container=$(echo ${ac_name} | cut -c1-6 | echo "databc-komodo" | awk '{print tolower($0)}')
 	rpc_port=${KV1_SMARTCHAIN_NODE_RPC_PORT}
 else
-        grep_container=$(echo ${ac_name}batch-komodo | awk '{print tolower($0)}') 
+        grep_container=$(echo ${ac_name}batchbc-komodo | awk '{print tolower($0)}') 
 	rpc_port=${BATCH_SMARTCHAIN_NODE_RPC_PORT}
 fi
 #echo ${grep_container}
