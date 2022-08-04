@@ -2,9 +2,10 @@
 source .env
 ac_name=$(echo ${1} | rev | cut -d '=' -f 1 | rev)
 data=$(echo ${ac_name} | rev | cut -c1-4 | rev) # | awk '{print tolower($0)')
+data2=$(echo ${ac_name} | cut -c1-3 ) # | awk '{print tolower($0)')
 prefix=$(pwd | rev | cut -d '/' -f 1 | rev | cut -d '-' -f 1)
 #echo $data
-if [ "$data" = "DATA" ] ; then
+if [ "$data" = "DATA" ] || [ "$data2" = "KV1" ] ; then
 	grep_container=$(echo "databc-komodo" | awk '{print tolower($0)}')
 	rpc_port=${KV1_SMARTCHAIN_NODE_RPC_PORT}
 else
@@ -16,6 +17,9 @@ clone=$(pwd | rev | cut -d '/' -f 1 |  cut -d '-' -f 1 | rev)
 container=$(docker ps -a | grep ${prefix}-${clone} | grep ${grep_container} | rev | cut -d ' ' -f 1 | rev)
 #echo ${ac_name} for instance $instance runs on ${container}
 command="/opt/komodo/komodo/src/komodo-cli -rpcuser=${BATCH_SMARTCHAIN_NODE_USERNAME} -rpcpassword=${BATCH_SMARTCHAIN_NODE_PASSWORD} -datadir=${DATA_PATH}${ac_name} -conffile=${DATA_PATH}${ac_name}/${ac_name}.conf -rpcport=$rpc_port $@"
+#echo ${DATA_PATH}${ac_name}
+#echo ${grep_container}
+#echo ${container}
 #echo $command
 #echo $ac_name | cut -c1-3
 docker exec -i -t ${container} ${command}
